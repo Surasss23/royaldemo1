@@ -1,5 +1,5 @@
 // ✅ Cart Management
-let cart = [];
+let cart = loadCart();
 
 function loadCart() {
   const savedCart = localStorage.getItem("cart");
@@ -21,7 +21,7 @@ function addToCart(menuItem, isFullSize) {
   } else {
     cart.push({
       id: menuItem.id,
-      name: menuItem.name, // ✅ Ensure Name is Stored
+      name: menuItem.name, // ✅ Item Name will be Stored & Shown
       quantity: 1,
       isFullSize,
       price: isFullSize ? menuItem.fullPrice : menuItem.singlePrice,
@@ -32,8 +32,8 @@ function addToCart(menuItem, isFullSize) {
   showToast(`🛒 Added to Cart: ${menuItem.name}`);
 }
 
-function removeFromCart(id) {
-  cart = cart.filter((item) => item.id !== id);
+function removeFromCart(id, isFullSize) {
+  cart = cart.filter((item) => !(item.id === id && item.isFullSize === isFullSize));
   saveCart();
 }
 
@@ -41,7 +41,7 @@ function calculateTotal() {
   return cart.reduce((total, item) => total + item.price * item.quantity, 0);
 }
 
-// ✅ Rendering Cart Items Properly
+// ✅ Rendering Cart Properly with Item Names
 function renderCart() {
   const cartItems = document.getElementById("cart-items");
   const cartTotal = document.getElementById("cart-total");
@@ -54,12 +54,12 @@ function renderCart() {
         (item) => `
       <div class="cart-item">
         <div>
-          <p><strong>${item.name}</strong></p>  <!-- ✅ Item Name Now Visible -->
+          <p><strong>${item.name}</strong></p>  <!-- ✅ Item Name is Now Visible -->
           <p>${item.quantity}x ${item.isFullSize ? "Full" : "Single"}</p>
         </div>
         <div>
           <p>₹${item.price * item.quantity}</p>
-          <button onclick="removeFromCart(${item.id})" class="button outline">Remove</button>
+          <button onclick="removeFromCart(${item.id}, ${item.isFullSize})" class="button outline">Remove</button>
         </div>
       </div>
     `
@@ -86,12 +86,13 @@ function handleOrder() {
     )
     .join("\n");
 
-  const phoneNumber = "+917075954214"; // Replace with actual number
+  const phoneNumber = "+917075954214"; // ✅ Replace with actual number
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
     `🛍️ *New Order Received:*\n\n${message}\n\n*Total: ₹${calculateTotal()}*`
   )}`;
 
   window.open(whatsappUrl);
+  
   cart = [];
   saveCart();
 }
