@@ -180,3 +180,51 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchMenuItems(); // ✅ Google Sheet se data fetch hoga
   renderCart();
 });
+
+// ✅ Floating Cart Button Add Karo
+function createFloatingCartButton() {
+  const floatingButton = document.createElement("button");
+  floatingButton.id = "floating-cart-button";
+  floatingButton.innerHTML = "🛒 Cart";
+  floatingButton.className = "floating-cart";
+
+  floatingButton.onclick = () => {
+    const cartSection = document.getElementById("cart-section");
+    cartSection.scrollIntoView({ behavior: "smooth" });
+  };
+
+  document.body.appendChild(floatingButton);
+}
+
+// ✅ CSS for Floating Button
+const style = document.createElement("style");
+style.innerHTML = `
+  .floating-cart {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff5733;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    font-size: 16px;
+    border-radius: 50px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    z-index: 999;
+  }
+  
+  .floating-cart:hover {
+    background-color: #e74c3c;
+  }
+`;
+document.head.appendChild(style);
+
+// ✅ Initialize Cart Button on Page Load
+document.addEventListener("DOMContentLoaded", () => {
+  createFloatingCartButton(); // ✅ Floating button hamesha visible rahega
+  cart = loadCart();
+  fetchMenuItems();
+  renderCart();
+});
