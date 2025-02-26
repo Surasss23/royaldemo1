@@ -27,7 +27,7 @@ function addToCart(menuItem, isFullSize) {
   }
 
   saveCart();
-  showToast(`${menuItem.name} added to cart`);
+  showToast(`🛒 Added to Cart: ${menuItem.name}`);
 }
 
 function removeFromCart(id) {
@@ -124,7 +124,7 @@ function renderCart() {
         (item) => `
       <div class="cart-item">
         <div>
-          <p>${item.name}</p>
+          <p><strong>${item.name}</strong></p>  
           <p>${item.quantity}x ${item.isFullSize ? "Full" : "Single"}</p>
         </div>
         <div>
@@ -161,7 +161,7 @@ function handleOrder() {
 
   const phoneNumber = "+917075954214"; // Replace with actual number
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-    `New Order:\n${message}\n\nTotal: ₹${calculateTotal()}`
+    `🛍️ *New Order Received:*\n\n${message}\n\n*Total: ₹${calculateTotal()}*`
   )}`;
 
   window.open(whatsappUrl);
