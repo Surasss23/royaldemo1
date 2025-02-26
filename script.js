@@ -117,60 +117,20 @@ function renderCart() {
   cartTotal.textContent = `₹${calculateTotal()}`;
 }
 
-// ✅ WhatsApp Order Button
-function handleOrder() {
-  if (cart.length === 0) {
-    showToast("⚠️ Please add items to cart first", "error");
-    return;
-  }
-
-  const message = cart.map(item => `${item.quantity}x ${item.name} (${item.isFullSize ? "Full" : "Single"}) - ₹${item.price * item.quantity}`).join("\n");
-
-  const phoneNumber = "+917075954214";
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(`🛍️ *New Order Received:*\n\n${message}\n\n*Total: ₹${calculateTotal()}*`)}`;
-
-  window.open(whatsappUrl);
-  cart = [];
-  saveCart();
-}
-
-// ✅ Floating Cart Button
+// ✅ Floating Cart Button Fix
 function createFloatingCartButton() {
   const floatingButton = document.createElement("button");
   floatingButton.id = "floating-cart-button";
   floatingButton.innerHTML = "🛒 Cart";
   floatingButton.className = "floating-cart";
-  floatingButton.onclick = () => openCart();
+  floatingButton.onclick = openCart;
   document.body.appendChild(floatingButton);
 }
-
-const style = document.createElement("style");
-style.innerHTML = `
-  .floating-cart {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #ff5733;
-    color: white;
-    border: none;
-    padding: 12px 18px;
-    font-size: 16px;
-    border-radius: 50px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    z-index: 999;
-  }
-  .floating-cart:hover {
-    background-color: #e74c3c;
-  }
-`;
-document.head.appendChild(style);
 
 function openCart() {
   const cartSection = document.getElementById("cart-section");
   if (cartSection) {
-    cartSection.style.display = "block";
+    cartSection.style.display = cartSection.style.display === "none" ? "block" : "none";
   } else {
     showToast("⚠️ Cart section not found!", "error");
   }
