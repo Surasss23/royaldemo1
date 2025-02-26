@@ -19,7 +19,7 @@ function addToCart(menuItem, isFullSize) {
   } else {
     cart.push({
       id: menuItem.id,
-      name: menuItem.name, // ✅ Ensure Name is Stored
+      name: menuItem.name,
       quantity: 1,
       isFullSize,
       price: isFullSize ? menuItem.fullPrice : menuItem.singlePrice,
@@ -47,20 +47,14 @@ async function fetchMenuItems() {
     const response = await fetch(sheetUrl);
     const data = await response.text();
 
-    // CSV Ko Array Me Convert Karo
     const rows = data.split("\n").map(row => row.split(","));
-
-    // Headers (Column Names) Fetch Karo
     const headers = rows[0].map(h => h.trim());
 
-    // Data Format Karo
     const menuItems = rows.slice(1).map(row => {
       let obj = {};
       headers.forEach((header, index) => {
-        obj[header] = row[index]?.trim(); // ? to avoid undefined values
+        obj[header] = row[index]?.trim();
       });
-
-      // Price values ko number me convert karo
       obj.id = Number(obj.id);
       obj.singlePrice = Number(obj.singlePrice);
       obj.fullPrice = Number(obj.fullPrice);
@@ -77,33 +71,25 @@ async function fetchMenuItems() {
 
 function renderMenu(menuItems) {
   const menuGrid = document.getElementById("menu-items");
-  menuGrid.innerHTML = menuItems
-    .map(
-      item => `
-      <div class="menu-item">
-        <img src="${item.imageUrl}" alt="${item.name}">
-        <div class="menu-item-content">
-          <h3>${item.name}</h3>
-          <p>${item.description}</p>
-          <div class="price-section">
-            <div>
-              <p>Single: ₹${item.singlePrice}</p>
-              <p>Full: ₹${item.fullPrice}</p>
-            </div>
-            <div class="buttons">
-              <button onclick='addToCart(${JSON.stringify(item)}, false)' class="button primary">
-                Add Single
-              </button>
-              <button onclick='addToCart(${JSON.stringify(item)}, true)' class="button secondary">
-                Add Full
-              </button>
-            </div>
+  menuGrid.innerHTML = menuItems.map(item => `
+    <div class="menu-item">
+      <img src="${item.imageUrl}" alt="${item.name}">
+      <div class="menu-item-content">
+        <h3>${item.name}</h3>
+        <p>${item.description}</p>
+        <div class="price-section">
+          <div>
+            <p>Single: ₹${item.singlePrice}</p>
+            <p>Full: ₹${item.fullPrice}</p>
+          </div>
+          <div class="buttons">
+            <button onclick='addToCart(${JSON.stringify(item)}, false)' class="button primary">Add Single</button>
+            <button onclick='addToCart(${JSON.stringify(item)}, true)' class="button secondary">Add Full</button>
           </div>
         </div>
       </div>
-    `
-    )
-    .join("");
+    </div>
+  `).join("");
 }
 
 // ✅ Rendering Cart Properly
@@ -114,9 +100,7 @@ function renderCart() {
   if (cart.length === 0) {
     cartItems.innerHTML = "<p>Your cart is empty</p>";
   } else {
-    cartItems.innerHTML = cart
-      .map(
-        (item, index) => `
+    cartItems.innerHTML = cart.map(item => `
       <div class="cart-item">
         <div>
           <p><strong>${item.name}</strong></p>
@@ -127,76 +111,39 @@ function renderCart() {
           <button onclick="removeFromCart(${item.id}, ${item.isFullSize})" class="button outline">Remove</button>
         </div>
       </div>
-    `
-      )
-      .join("");
+    `).join("");
   }
 
   cartTotal.textContent = `₹${calculateTotal()}`;
 }
 
-// ✅ WhatsApp Order Button (Now Sends Proper Name)
+// ✅ WhatsApp Order Button
 function handleOrder() {
   if (cart.length === 0) {
     showToast("⚠️ Please add items to cart first", "error");
     return;
   }
 
-  const message = cart
-    .map(
-      item =>
-        `${item.quantity}x ${item.name} (${item.isFullSize ? "Full" : "Single"}) - ₹${
-          item.price * item.quantity
-        }`
-    )
-    .join("\n");
+  const message = cart.map(item => `${item.quantity}x ${item.name} (${item.isFullSize ? "Full" : "Single"}) - ₹${item.price * item.quantity}`).join("\n");
 
-  const phoneNumber = "+917075954214"; // ✅ Replace with actual number
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-    `🛍️ *New Order Received:*\n\n${message}\n\n*Total: ₹${calculateTotal()}*`
-  )}`;
+  const phoneNumber = "+917075954214";
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(`🛍️ *New Order Received:*\n\n${message}\n\n*Total: ₹${calculateTotal()}*`)}`;
 
   window.open(whatsappUrl);
-  
   cart = [];
   saveCart();
 }
 
-// ✅ Utility Functions
-function showToast(message, type = "success") {
-  const toast = document.createElement("div");
-  toast.className = `toast ${type}`;
-  toast.textContent = message;
-  document.body.appendChild(toast);
-
-  setTimeout(() => {
-    toast.remove();
-  }, 3000);
-}
-
-// ✅ Initialize
-document.addEventListener("DOMContentLoaded", () => {
-  cart = loadCart();
-  fetchMenuItems(); // ✅ Google Sheet se data fetch hoga
-  renderCart();
-});
-
-// ✅ Floating Cart Button Add Karo
+// ✅ Floating Cart Button
 function createFloatingCartButton() {
   const floatingButton = document.createElement("button");
   floatingButton.id = "floating-cart-button";
   floatingButton.innerHTML = "🛒 Cart";
   floatingButton.className = "floating-cart";
-
-  floatingButton.onclick = () => {
-    const cartSection = document.getElementById("cart-section");
-    cartSection.scrollIntoView({ behavior: "smooth" });
-  };
-
+  floatingButton.onclick = () => openCart();
   document.body.appendChild(floatingButton);
 }
 
-// ✅ CSS for Floating Button
 const style = document.createElement("style");
 style.innerHTML = `
   .floating-cart {
@@ -214,16 +161,31 @@ style.innerHTML = `
     transition: all 0.3s ease-in-out;
     z-index: 999;
   }
-  
   .floating-cart:hover {
     background-color: #e74c3c;
   }
 `;
 document.head.appendChild(style);
 
-// ✅ Initialize Cart Button on Page Load
+function openCart() {
+  const cartSection = document.getElementById("cart-section");
+  if (cartSection) {
+    cartSection.style.display = "block";
+  } else {
+    showToast("⚠️ Cart section not found!", "error");
+  }
+}
+
+function showToast(message, type = "success") {
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.remove(); }, 3000);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  createFloatingCartButton(); // ✅ Floating button hamesha visible rahega
+  createFloatingCartButton();
   cart = loadCart();
   fetchMenuItems();
   renderCart();
