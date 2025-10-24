@@ -1,72 +1,134 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Food Corner</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>2 Textboxes — Project Code</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #f4f8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .wrap {
+      width: 100%;
+      max-width: 900px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #222;
+      font-size: 20px;
+    }
+    .box {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #333;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 200px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 13px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fdfdfd;
+    }
+    button {
+      margin-top: 8px;
+      align-self: flex-end;
+      background: #2b9cff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 13px;
+    }
+    button:hover {
+      background: #1f82d8;
+    }
+  </style>
 </head>
 <body>
-    <!-- Hero Section -->
-    <div class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Royal Food Corner</h1>
-                <p>Experience the royal taste of authentic Indian cuisine, crafted with passion and served with elegance.</p>
-                <div class="contact-info">
-                    <div>
-                        <p class="label">Location</p>
-                        <p>Mangalhat</p>
-                    </div>
-                    <div>
-                        <p class="label">Hours</p>
-                        <p>02 PM - 12:30 AM</p>
-                    </div>
-                    <div>
-                        <p class="label">Contact</p>
-                        <p>+91 70759 54214</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="wrap">
+    <h1>Paste Your Project Code (2 Boxes)</h1>
+
+    <!-- BOX 1 -->
+    <div class="box">
+      <label>Box 1</label>
+      <textarea id="box1">
+        c) Shell script to check for an Armstrong number
+#!/bin/bash
+echo -n "Enter A Number: "
+read -r n
+arm=0
+temp=$n
+while [ "$n" -ne 0 ]; do
+r=$((n % 10))
+arm=$((arm + r * r * r))
+n=$((n / 10))
+done
+echo $arm
+if [ $arm -eq "$temp" ]; then
+echo "Armstrong"
+else
+echo "Not Armstrong"
+fi
+Output1:
+Enter a number: 153
+Sum of cubes: 153
+Armstrong
+Output2:
+Enter a number: 123
+Sum of cubes: 36
+Not Armstrong
+    </textarea>
+      <button onclick="copyText('box1')">Copy Box 1</button>
     </div>
 
-    <!-- Main Content -->
-    <div class="container main-content">
-        <div class="menu-section">
-            <h2>Our Menu</h2>
-            <div id="menu-items" class="menu-grid"></div>
-        </div>
-
-        <!-- Cart Section -->
-        <div class="cart-section">
-            <div class="cart-container">
-                <h2>Your Order</h2>
-                <div id="cart-items" class="cart-items"></div>
-                <div class="cart-total">
-                    <span>Total</span>
-                    <span id="cart-total">₹0</span>
-                </div>
-                <button id="order-button" class="button primary" onclick="handleOrder()">
-                    <i class="fab fa-whatsapp"></i> Order on WhatsApp
-                </button>
-            </div>
-
-            <div class="action-buttons">
-                <button class="button" onclick="window.open('https://maps.app.goo.gl/VJBm7Qb4eoNn3j9t8')">
-                    <i class="fas fa-directions"></i> Get Directions
-                </button>
-                <button class="button secondary" onclick="window.open('https://www.instagram.com/royal_foodcorner?utm_source=qr&igsh=MXM4OWl3Y2w5Y2UxZQ==')">
-                    <i class="fab fa-instagram"></i> Follow on Instagram
-                </button>
-                <button class="button outline" onclick="window.open('https://g.page/royalfoodcorner/review')">
-                    <i class="fab fa-google"></i> Rate us on Google
-                </button>
-            </div>
-        </div>
+    <!-- BOX 2 -->
+    <div class="box">
+      <label>Box 2</label>
+      <textarea id="box2">
+        c) Demonstrate Caching a Template Fragment
+In Python, you can use the Template class from the string module to create and 
+work with templates.
+from string import Template
+# Define a template
+template = Template('Hello, $name! Welcome to $place.')
+# Substitute values into the template
+result = template.substitute(name='hi', place='hello')
+print(result)
+    </textarea>
+      <button onclick="copyText('box2')">Copy Box 2</button>
     </div>
-    <script src="script.js"></script>
+  </div>
+
+  <script>
+    function copyText(id) {
+      const text = document.getElementById(id).value;
+      navigator.clipboard.writeText(text)
+        .then(() => alert(id + ' copied!'))
+        .catch(() => alert('Copy failed!'));
+    }
+  </script>
 </body>
 </html>
