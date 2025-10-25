@@ -75,31 +75,62 @@
     <div class="box">
       <label>Box 1</label>
       <textarea id="box1">
-        c) Shell script to check for an Armstrong number
-#!/bin/bash
-echo -n "Enter A Number: "
-read -r n
-arm=0
-temp=$n
-while [ "$n" -ne 0 ]; do
-r=$((n % 10))
-arm=$((arm + r * r * r))
-n=$((n / 10))
-done
-echo $arm
-if [ $arm -eq "$temp" ]; then
-echo "Armstrong"
-else
-echo "Not Armstrong"
-fi
-Output1:
-Enter a number: 153
-Sum of cubes: 153
-Armstrong
-Output2:
-Enter a number: 123
-Sum of cubes: 36
-Not Armstrong
+        WebForm1.aspx:
+<%@ Page Language="C#" AutoEventWireup="true"
+CodeBehind="WebForm1.aspx.cs"
+Inherits="WebApplication3.WebForm1" %>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<title>Course Information Form</title>
+</head>
+<body>
+<form id="form1" runat="server">
+<div>
+<h2>Enter Course Details</h2>
+<asp:Label ID="L1" runat="server" Text="Roll No: ">
+</asp:Label>
+<asp:TextBox ID="t1" runat="server"></asp:TextBox>
+<br /><br />
+<asp:Label ID="L2" runat="server" Text="Name: ">
+</asp:Label>
+<asp:TextBox ID="t2" runat="server"></asp:TextBox>
+<br />
+<asp:Label ID="L3" runat="server" Text="Gender: ">
+</asp:Label>
+<asp:RadioButtonList ID="r1" runat="server">
+<asp:ListItem Text="Male" Value="Male">
+</asp:ListItem>
+<asp:ListItem Text="Female" Value="Female">
+</asp:ListItem>
+</asp:RadioButtonList>
+<br />
+<asp:Label ID="L4" runat="server" Text="Course: ">
+</asp:Label>
+<asp:TextBox ID="t3" runat="server"></asp:TextBox>
+<br /><br />
+<asp:Label ID="L5" runat="server" Text="Year: ">
+  </asp:Label>
+<asp:DropDownList ID="y1" runat="server">
+<asp:ListItem Text="Select year" Value="">
+</asp:ListItem>
+<asp:ListItem Text="1" Value="1 year">
+</asp:ListItem>
+<asp:ListItem Text="2" Value="2 year">
+</asp:ListItem>
+<asp:ListItem Text="3" Value="3 year">
+</asp:ListItem>
+</asp:DropDownList>
+<br /><br />
+<asp:Button ID="b1" runat="server" Text="Submit"
+OnClick="btnSubmit_Click" />
+<br />
+<asp:Label ID="L6" runat="server" Text="">
+</asp:Label>
+</div>
+</form>
+</body>
+</html>
     </textarea>
       <button onclick="copyText('box1')">Copy Box 1</button>
     </div>
@@ -108,15 +139,38 @@ Not Armstrong
     <div class="box">
       <label>Box 2</label>
       <textarea id="box2">
-        c) Demonstrate Caching a Template Fragment
-In Python, you can use the Template class from the string module to create and 
-work with templates.
-from string import Template
-# Define a template
-template = Template('Hello, $name! Welcome to $place.')
-# Substitute values into the template
-result = template.substitute(name='hi', place='hello')
-print(result)
+        WebForm1.aspx.cs
+using System;
+namespace WebApplication3
+{
+public partial class WebForm1 : System.Web.UI.Page
+{
+protected void Page_Load(object sender, EventArgs e)
+{
+}
+protected void btnSubmit_Click(object sender, EventArgs e)
+{
+string rollNo = t1.Text;
+string name = t2.Text;
+string gender = r1.SelectedValue;
+string course = t3.Text;
+string year = y1.SelectedItem.Text;
+if (!string.IsNullOrEmpty(course) &&
+!string.IsNullOrEmpty(year))
+{
+L6.Text = $"<br />Roll No: {rollNo}<br />" +
+$"Name: {name}<br />" +
+$"Gender: {gender}<br />" +
+$"Course: {course}<br />" +
+$"Year: {year}";
+}
+else
+{
+L6.Text = "Please fill in all fields.";
+}
+}
+}
+}
     </textarea>
       <button onclick="copyText('box2')">Copy Box 2</button>
     </div>
