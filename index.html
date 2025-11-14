@@ -2,100 +2,197 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bash & Python Example</title>
+<title>Copy Boxes – ASP.NET + Steps</title>
 <style>
     body {
-        font-family: 'Courier New', monospace;
-        background-color: #0d1117;
-        color: #ffffff;
+        font-family: Arial, sans-serif;
+        background: #eef6ff;
+        padding: 20px;
+        color: #002b4d;
+    }
+    h2 {
         text-align: center;
-        padding: 30px;
+        color: #004f7a;
     }
-    .code-box {
-        background-color: #161b22;
-        border: 1px solid #30363d;
-        border-radius: 8px;
+    .box {
+        background: #ffffff;
         padding: 15px;
-        text-align: left;
-        white-space: pre;
-        overflow-x: auto;
-        font-size: 15px;
-        max-width: 700px;
-        margin: 0 auto;
-        color: #00ff88;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
     }
-    .copy-btn {
-        background-color: #238636;
+    textarea {
+        width: 100%;
+        height: 320px;
+        border-radius: 8px;
+        border: 1px solid #bcd7ea;
+        padding: 10px;
+        font-size: 14px;
+        background: #f7fbff;
+        color: #003753;
+        white-space: pre;
+    }
+    button {
+        margin-top: 10px;
+        padding: 10px 18px;
+        background: #0077b6;
         color: white;
         border: none;
-        padding: 8px 14px;
-        border-radius: 5px;
+        border-radius: 6px;
         cursor: pointer;
-        margin-top: 10px;
-        font-size: 14px;
     }
-    .copy-btn:hover {
-        background-color: #2ea043;
+    button:hover {
+        background: #005f8a;
     }
 </style>
+
+<script>
+function copyText(id) {
+    var text = document.getElementById(id);
+    text.select();
+    text.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(text.value);
+    alert("Copied!");
+}
+</script>
 </head>
 <body>
 
-<h2>Bash & Python Code Example</h2>
+<h2>Copy Your Notes Easily</h2>
 
-<div class="code-box" id="codeBox">
-#!/bin/bash
-echo -n "Enter a number: "
-read -r n
-arm=0
-temp=$n
-while [ "$n" -ne 0 ]; do
-    r=$((n % 10))
-    arm=$((arm + r * r * r))
-    n=$((n / 10))
-done
-echo "Sum of cubes: $arm"
-if [ $arm -eq "$temp" ]; then
-    echo "Armstrong"
-else
-    echo "Not Armstrong"
-fi
+<!-- BOX 1 -->
+<div class="box">
+    <h3>📌 Box 1: Visual Studio Steps (Arranged)</h3>
+    <textarea id="copy1">
+Step 1:
+• Open Visual Studio.
+• In the Start Window, click on "Create a new project".
 
-# Output 1:
-# Enter a number: 153
-# Sum of cubes: 153
-# Armstrong
+Step 2:
+• In the "Create a new project" window, search for "Console App".
+• Select "Console App (.NET Core)".
+• Click Next.
+• Name the project "First project" → Next → Create.
+• Program.cs will open automatically.
+• Replace the Program.cs content with:
 
-# Output 2:
-# Enter a number: 123
-# Sum of cubes: 36
-# Not Armstrong
+Program.cs
+using System;
+namespace HelloWorld
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello, World!");
+            Console.ReadLine();
+        }
+    }
+}
 
+• Click the Save button.
 
-# ---------------- PYTHON SCRIPT ----------------
-
-from string import Template
-
-# Define a template
-template = Template('Hello, $name! Welcome to $place.')
-
-# Substitute values into the template
-result = template.substitute(name='hi', place='hello')
-
-print(result)
-# Output: Hello, hi! Welcome to hello.
+Step 3:
+• Click Run (green arrow) or press F5.
+• A console window opens and displays: Hello, World!
+    </textarea>
+    <button onclick="copyText('copy1')">Copy Box 1</button>
 </div>
 
-<button class="copy-btn" onclick="copyCode()">Copy Code</button>
+<!-- BOX 2 -->
+<div class="box">
+    <h3>📌 Box 2: WebForm1.aspx + WebForm1.aspx.cs Code</h3>
+    <textarea id="copy2">
+WebForm1.aspx:
+<%@ Page Language="C#" AutoEventWireup="true"
+CodeBehind="WebForm1.aspx.cs"
+Inherits="WebApplication3.WebForm1" %>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<title>Course Information Form</title>
+</head>
+<body>
+<form id="form1" runat="server">
+<div>
+<h2>Enter Course Details</h2>
 
-<script>
-function copyCode() {
-    const codeBox = document.getElementById('codeBox');
-    navigator.clipboard.writeText(codeBox.innerText);
-    alert('Code copied to clipboard!');
+<asp:Label ID="L1" runat="server" Text="Roll No: "></asp:Label>
+<asp:TextBox ID="t1" runat="server"></asp:TextBox>
+<br /><br />
+
+<asp:Label ID="L2" runat="server" Text="Name: "></asp:Label>
+<asp:TextBox ID="t2" runat="server"></asp:TextBox>
+<br />
+
+<asp:Label ID="L3" runat="server" Text="Gender: "></asp:Label>
+<asp:RadioButtonList ID="r1" runat="server">
+    <asp:ListItem Text="Male" Value="Male"></asp:ListItem>
+    <asp:ListItem Text="Female" Value="Female"></asp:ListItem>
+</asp:RadioButtonList>
+<br />
+
+<asp:Label ID="L4" runat="server" Text="Course: "></asp:Label>
+<asp:TextBox ID="t3" runat="server"></asp:TextBox>
+<br /><br />
+
+<asp:Label ID="L5" runat="server" Text="Year: "></asp:Label>
+<asp:DropDownList ID="y1" runat="server">
+    <asp:ListItem Text="Select year" Value=""></asp:ListItem>
+    <asp:ListItem Text="1" Value="1 year"></asp:ListItem>
+    <asp:ListItem Text="2" Value="2 year"></asp:ListItem>
+    <asp:ListItem Text="3" Value="3 year"></asp:ListItem>
+</asp:DropDownList>
+<br /><br />
+
+<asp:Button ID="b1" runat="server" Text="Submit" OnClick="btnSubmit_Click" />
+<br />
+<asp:Label ID="L6" runat="server" Text=""></asp:Label>
+
+</div>
+</form>
+</body>
+</html>
+
+----------------------------------------------------
+
+WebForm1.aspx.cs
+using System;
+namespace WebApplication3
+{
+public partial class WebForm1 : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+    }
+
+    protected void btnSubmit_Click(object sender, EventArgs e)
+    {
+        string rollNo = t1.Text;
+        string name = t2.Text;
+        string gender = r1.SelectedValue;
+        string course = t3.Text;
+        string year = y1.SelectedItem.Text;
+
+        if (!string.IsNullOrEmpty(course) &&
+            !string.IsNullOrEmpty(year))
+        {
+            L6.Text = $"<br />Roll No: {rollNo}<br />" +
+                      $"Name: {name}<br />" +
+                      $"Gender: {gender}<br />" +
+                      $"Course: {course}<br />" +
+                      $"Year: {year}";
+        }
+        else
+        {
+            L6.Text = "Please fill in all fields.";
+        }
+    }
 }
-</script>
+}
+    </textarea>
+    <button onclick="copyText('copy2')">Copy Box 2</button>
+</div>
 
 </body>
 </html>
