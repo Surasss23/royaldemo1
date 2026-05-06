@@ -1,198 +1,294 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Copy Boxes – ASP.NET + Steps</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #eef6ff;
-        padding: 20px;
-        color: #002b4d;
-    }
-    h2 {
-        text-align: center;
-        color: #004f7a;
-    }
-    .box {
-        background: #ffffff;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        margin-bottom: 30px;
-    }
-    textarea {
-        width: 100%;
-        height: 320px;
-        border-radius: 8px;
-        border: 1px solid #bcd7ea;
-        padding: 10px;
-        font-size: 14px;
-        background: #f7fbff;
-        color: #003753;
-        white-space: pre;
-    }
-    button {
-        margin-top: 10px;
-        padding: 10px 18px;
-        background: #0077b6;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-    }
-    button:hover {
-        background: #005f8a;
-    }
-</style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Code Copy</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<script>
-function copyText(id) {
-    var text = document.getElementById(id);
-    text.select();
-    text.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(text.value);
-    alert("Copied!");
+```
+:root {
+  --bg: #080808;
+  --white: #f5f5f5;
+  --mid: #1a1a1a;
+  --border: #2e2e2e;
+  --muted: #555;
 }
-</script>
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'IBM Plex Mono', monospace;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrapper {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  padding: 48px 24px;
+  width: 100%;
+  max-width: 560px;
+}
+
+.header {
+  text-align: center;
+}
+
+.header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 10vw, 5.5rem);
+  letter-spacing: 0.08em;
+  line-height: 1;
+  color: var(--white);
+}
+
+.header p {
+  margin-top: 8px;
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+.buttons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.copy-btn {
+  position: relative;
+  background: transparent;
+  color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  padding: 18px 48px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  overflow: hidden;
+  transition: color 0.25s;
+}
+
+.copy-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--white);
+  transform: translateY(100%);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+}
+
+.copy-btn:hover::before { transform: translateY(0); }
+.copy-btn:hover { color: #080808; }
+
+.copy-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+.copy-btn.copied {
+  border-color: #fff;
+  color: #080808;
+}
+.copy-btn.copied::before { transform: translateY(0); }
+
+.status {
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  color: var(--muted);
+  text-transform: uppercase;
+  min-height: 16px;
+  text-align: center;
+  transition: color 0.3s;
+}
+
+.status.active { color: var(--white); }
+
+.corner {
+  position: fixed;
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.corner.tl { top: 20px; left: 24px; }
+.corner.br { bottom: 20px; right: 24px; }
+```
+
+  </style>
 </head>
 <body>
 
-<h2>Copy Your Notes Easily</h2>
+<span class="corner tl">Java / JDBC</span>
+<span class="corner br">v1.0</span>
 
-<!-- BOX 1 -->
-<div class="box">
-    <h3>📌 Box 1: Visual Studio Steps (Arranged)</h3>
-    <textarea id="copy1">
-Step 1:
-• Open Visual Studio.
-• In the Start Window, click on "Create a new project".
+  <div class="wrapper">
 
-Step 2:
-• In the "Create a new project" window, search for "Console App".
-• Select "Console App (.NET Core)".
-• Click Next.
-• Name the project "First project" → Next → Create.
-• Program.cs will open automatically.
-• Replace the Program.cs content with:
+```
+<div class="header">
+  <h1>Code Copy</h1>
+  <p>click a button to copy the snippet</p>
+</div>
 
-Program.cs
-using System;
-namespace HelloWorld
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello, World!");
-            Console.ReadLine();
+<div class="divider"></div>
+
+<div class="buttons">
+  <button class="copy-btn" onclick="copyCode(1, this)"><span>Copy 1</span></button>
+  <button class="copy-btn" onclick="copyCode(2, this)"><span>Copy 2</span></button>
+</div>
+
+<div class="status" id="status">&nbsp;</div>
+```
+
+  </div>
+
+  <!-- ============================================================
+       YOUR CODE IS STORED BELOW IN JAVASCRIPT TEMPLATE LITERALS
+       To change/update code: edit between the backticks ` `
+       CODE 1 = Create_Table program
+       CODE 2 = Delete_Table program
+       ============================================================ -->
+
+  <script>
+
+    // ✏️ CODE 1 — PASTE / EDIT YOUR FIRST PROGRAM BETWEEN THE BACKTICKS
+import java.sql.*;
+import java.util.Scanner;
+
+public class ConnectionDemo {
+    public static void main(String[] args) {
+        String url = "jdbc:oracle:thin:@localhost:1521:xe";
+        String user = "root";
+        String password = "root";
+        String insert = "INSERT INTO student VALUES (?, ?, ?)";
+        
+        try (Connection con = DriverManager.getConnection(url, user, password);
+             Scanner sc = new Scanner(System.in)) {
+            
+            con.setAutoCommit(false); // manage transaction manually
+            
+            System.out.print("Enter name: ");
+            String name = sc.nextLine().trim();
+            
+            System.out.print("Enter roll no: ");
+            int roll = Integer.parseInt(sc.nextLine().trim());
+            
+            System.out.print("Enter class: ");
+            String cls = sc.nextLine().trim();
+            
+            try (PreparedStatement ps = con.prepareStatement(insert)) {
+                ps.setString(1, name);
+                ps.setInt(2, roll);
+                ps.setString(3, cls);
+                
+                int rows = ps.executeUpdate();
+                if (rows == 1) {
+                    con.commit();
+                    System.out.println("Inserted successfully.");
+                } else {
+                    con.rollback();
+                    System.out.println("Insertion failed, rolled back.");
+                }
+            } catch (SQLException e) {
+                con.rollback();
+                System.err.println("Insert error, rolled back: " + e.getMessage());
+                e.printStackTrace();
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("DB connection error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
-}
+}`;
 
-• Click the Save button.
-
-Step 3:
-• Click Run (green arrow) or press F5.
-• A console window opens and displays: Hello, World!
-    </textarea>
-    <button onclick="copyText('copy1')">Copy Box 1</button>
-</div>
-
-<!-- BOX 2 -->
-<div class="box">
-    <h3>📌 Box 2: WebForm1.aspx + WebForm1.aspx.cs Code</h3>
-    <textarea id="copy2">
-WebForm1.aspx:
-<%@ Page Language="C#" AutoEventWireup="true"
-CodeBehind="WebForm1.aspx.cs"
-Inherits="WebApplication3.WebForm1" %>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-<title>Course Information Form</title>
+    // ✏️ CODE 2 — PASTE / EDIT YOUR SECOND PROGRAM BETWEEN THE BACKTICKS
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<html>
+<head>
+    <title>JSTL Core Tag Elements</title>
 </head>
 <body>
-<form id="form1" runat="server">
-<div>
-<h2>Enter Course Details</h2>
-
-<asp:Label ID="L1" runat="server" Text="Roll No: "></asp:Label>
-<asp:TextBox ID="t1" runat="server"></asp:TextBox>
-<br /><br />
-
-<asp:Label ID="L2" runat="server" Text="Name: "></asp:Label>
-<asp:TextBox ID="t2" runat="server"></asp:TextBox>
-<br />
-
-<asp:Label ID="L3" runat="server" Text="Gender: "></asp:Label>
-<asp:RadioButtonList ID="r1" runat="server">
-    <asp:ListItem Text="Male" Value="Male"></asp:ListItem>
-    <asp:ListItem Text="Female" Value="Female"></asp:ListItem>
-</asp:RadioButtonList>
-<br />
-
-<asp:Label ID="L4" runat="server" Text="Course: "></asp:Label>
-<asp:TextBox ID="t3" runat="server"></asp:TextBox>
-<br /><br />
-
-<asp:Label ID="L5" runat="server" Text="Year: "></asp:Label>
-<asp:DropDownList ID="y1" runat="server">
-    <asp:ListItem Text="Select year" Value=""></asp:ListItem>
-    <asp:ListItem Text="1" Value="1 year"></asp:ListItem>
-    <asp:ListItem Text="2" Value="2 year"></asp:ListItem>
-    <asp:ListItem Text="3" Value="3 year"></asp:ListItem>
-</asp:DropDownList>
-<br /><br />
-
-<asp:Button ID="b1" runat="server" Text="Submit" OnClick="btnSubmit_Click" />
-<br />
-<asp:Label ID="L6" runat="server" Text=""></asp:Label>
-
-</div>
-</form>
+    <h2>Demonstrating JSTL Core Tags</h2>
+    
+    <c:set var="userRole" value="Administrator" />
+    
+    <c:if test="${userRole == 'Administrator'}">
+        <p>Welcome! You have root access privileges.</p>
+    </c:if>
+    
+    <h4>Module List:</h4>
+    <c:set var="modules" value="${['JDBC', 'Servlet', 'JSP']}" />
+    <ul>
+        <c:forEach var="item" items="${modules}">
+            <li>${item}</li>
+        </c:forEach>
+    </ul>
 </body>
-</html>
+</html>`;
 
-----------------------------------------------------
+    // ============================================================
 
-WebForm1.aspx.cs
-using System;
-namespace WebApplication3
-{
-public partial class WebForm1 : System.Web.UI.Page
-{
-    protected void Page_Load(object sender, EventArgs e)
-    {
+    const statusEl = document.getElementById('status');
+
+    function copyCode(num, btn) {
+      const text = num === 1 ? code1 : code2;
+      const label = num === 1 ? 'Create_Table' : 'Delete_Table';
+      navigator.clipboard.writeText(text).then(() => {
+        btn.querySelector('span').textContent = '✓ Copied';
+        btn.classList.add('copied');
+        statusEl.textContent = label + '.java copied to clipboard';
+        statusEl.classList.add('active');
+        setTimeout(() => {
+          btn.querySelector('span').textContent = `Copy ${num}`;
+          btn.classList.remove('copied');
+          statusEl.textContent = '\u00a0';
+          statusEl.classList.remove('active');
+        }, 2500);
+      });
     }
 
-    protected void btnSubmit_Click(object sender, EventArgs e)
-    {
-        string rollNo = t1.Text;
-        string name = t2.Text;
-        string gender = r1.SelectedValue;
-        string course = t3.Text;
-        string year = y1.SelectedItem.Text;
-
-        if (!string.IsNullOrEmpty(course) &&
-            !string.IsNullOrEmpty(year))
-        {
-            L6.Text = $"<br />Roll No: {rollNo}<br />" +
-                      $"Name: {name}<br />" +
-                      $"Gender: {gender}<br />" +
-                      $"Course: {course}<br />" +
-                      $"Year: {year}";
-        }
-        else
-        {
-            L6.Text = "Please fill in all fields.";
-        }
-    }
-}
-}
-    </textarea>
-    <button onclick="copyText('copy2')">Copy Box 2</button>
-</div>
+  </script>
 
 </body>
 </html>
