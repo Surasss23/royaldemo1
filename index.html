@@ -10,29 +10,19 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 ```
-:root {
-  --bg: #080808;
-  --white: #f5f5f5;
-  --mid: #1a1a1a;
-  --border: #2e2e2e;
-  --muted: #555;
-}
-
 body {
-  background: var(--bg);
-  color: var(--white);
+  background: #080808;
+  color: #f5f5f5;
   font-family: 'IBM Plex Mono', monospace;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0;
   overflow: hidden;
   position: relative;
 }
 
-/* grid background */
 body::before {
   content: '';
   position: fixed;
@@ -53,26 +43,21 @@ body::before {
   align-items: center;
   gap: 48px;
   padding: 48px 24px;
-  width: 100%;
-  max-width: 560px;
 }
 
-.header {
-  text-align: center;
-}
+.header { text-align: center; }
 
 .header h1 {
   font-family: 'Bebas Neue', sans-serif;
   font-size: clamp(3rem, 10vw, 5.5rem);
   letter-spacing: 0.08em;
   line-height: 1;
-  color: var(--white);
 }
 
 .header p {
   margin-top: 8px;
   font-size: 0.7rem;
-  color: var(--muted);
+  color: #555;
   letter-spacing: 0.2em;
   text-transform: uppercase;
 }
@@ -80,7 +65,7 @@ body::before {
 .divider {
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  background: linear-gradient(90deg, transparent, #2e2e2e, transparent);
 }
 
 .buttons {
@@ -93,9 +78,8 @@ body::before {
 .copy-btn {
   position: relative;
   background: transparent;
-  color: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 0;
+  color: #f5f5f5;
+  border: 1px solid #2e2e2e;
   padding: 18px 48px;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.85rem;
@@ -111,43 +95,35 @@ body::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--white);
+  background: #f5f5f5;
   transform: translateY(100%);
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
   z-index: 0;
 }
 
 .copy-btn:hover::before { transform: translateY(0); }
 .copy-btn:hover { color: #080808; }
+.copy-btn span { position: relative; z-index: 1; }
 
-.copy-btn span {
-  position: relative;
-  z-index: 1;
-}
-
-.copy-btn.copied {
-  border-color: #fff;
-  color: #080808;
-}
+.copy-btn.copied { color: #080808; }
 .copy-btn.copied::before { transform: translateY(0); }
 
 .status {
   font-size: 0.65rem;
   letter-spacing: 0.25em;
-  color: var(--muted);
+  color: #555;
   text-transform: uppercase;
   min-height: 16px;
   text-align: center;
   transition: color 0.3s;
 }
-
-.status.active { color: var(--white); }
+.status.active { color: #f5f5f5; }
 
 .corner {
   position: fixed;
   font-size: 0.55rem;
   letter-spacing: 0.15em;
-  color: var(--muted);
+  color: #444;
   text-transform: uppercase;
 }
 .corner.tl { top: 20px; left: 24px; }
@@ -158,17 +134,16 @@ body::before {
 </head>
 <body>
 
-<span class="corner tl">Java / JDBC</span>
+<span class="corner tl">Java / JSP</span>
 <span class="corner br">v1.0</span>
 
   <div class="wrapper">
+    <div class="header">
+      <h1>Code Copy</h1>
+      <p>click a button to copy the snippet</p>
+    </div>
 
 ```
-<div class="header">
-  <h1>Code Copy</h1>
-  <p>click a button to copy the snippet</p>
-</div>
-
 <div class="divider"></div>
 
 <div class="buttons">
@@ -183,15 +158,15 @@ body::before {
 
   <!-- ============================================================
        YOUR CODE IS STORED BELOW IN JAVASCRIPT TEMPLATE LITERALS
-       To change/update code: edit between the backticks ` `
-       CODE 1 = Create_Table program
-       CODE 2 = Delete_Table program
+       CODE 1 = ConnectionDemo.java
+       CODE 2 = JSTL JSP program
+       To update: edit the text between the backticks ` `
        ============================================================ -->
 
   <script>
 
-    // ✏️ CODE 1 — PASTE / EDIT YOUR FIRST PROGRAM BETWEEN THE BACKTICKS
-'import java.sql.*;
+    // ✏️ CODE 1 — ConnectionDemo.java
+    const code1 = `import java.sql.*;
 import java.util.Scanner;
 
 public class ConnectionDemo {
@@ -241,8 +216,8 @@ public class ConnectionDemo {
     }
 }`;
 
-    // ✏️ CODE 2 — PASTE / EDIT YOUR SECOND PROGRAM BETWEEN THE BACKTICKS
-'<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    // ✏️ CODE 2 — JSTL JSP Program
+    const code2 = `<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
@@ -253,15 +228,15 @@ public class ConnectionDemo {
     
     <c:set var="userRole" value="Administrator" />
     
-    <c:if test="${userRole == 'Administrator'}">
+    <c:if test="\${userRole == 'Administrator'}">
         <p>Welcome! You have root access privileges.</p>
     </c:if>
     
     <h4>Module List:</h4>
-    <c:set var="modules" value="${['JDBC', 'Servlet', 'JSP']}" />
+    <c:set var="modules" value="\${['JDBC', 'Servlet', 'JSP']}" />
     <ul>
-        <c:forEach var="item" items="${modules}">
-            <li>${item}</li>
+        <c:forEach var="item" items="\${modules}">
+            <li>\${item}</li>
         </c:forEach>
     </ul>
 </body>
@@ -273,11 +248,11 @@ public class ConnectionDemo {
 
     function copyCode(num, btn) {
       const text = num === 1 ? code1 : code2;
-      const label = num === 1 ? 'Create_Table' : 'Delete_Table';
+      const label = num === 1 ? 'ConnectionDemo.java' : 'JSTL JSP program';
       navigator.clipboard.writeText(text).then(() => {
         btn.querySelector('span').textContent = '✓ Copied';
         btn.classList.add('copied');
-        statusEl.textContent = label + '.java copied to clipboard';
+        statusEl.textContent = label + ' copied to clipboard';
         statusEl.classList.add('active');
         setTimeout(() => {
           btn.querySelector('span').textContent = `Copy ${num}`;
